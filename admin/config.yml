@@ -1,0 +1,92 @@
+# Admin editor settings.
+# Connected to github.com/dmcordeiro/cordeiro-portfolio
+backend:
+  name: github
+  repo: dmcordeiro/cordeiro-portfolio
+  branch: main
+
+# Pictures and PDFs you upload in the editor are stored here.
+media_folder: uploads
+public_folder: uploads
+
+site_url: https://dmcordeiro.github.io/cordeiro-portfolio
+display_url: https://dmcordeiro.github.io/cordeiro-portfolio
+
+collections:
+  - name: projects
+    label: Projects
+    editor: { preview: false }
+    files:
+      - name: projects
+        label: All projects
+        file: content/projects.json
+        fields:
+          - name: projects
+            label: Projects
+            label_singular: Project
+            hint: Drag projects to reorder them. The order here is the order on the site (top = first).
+            widget: list
+            summary: "{{fields.title}}"
+            add_to_top: true
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: dates, label: Dates, widget: string, required: false, hint: "e.g. Sep 2026 – Current" }
+              - { name: summary, label: Short summary, widget: string, required: false, hint: One line shown under the project on the Projects page. }
+              - { name: description, label: Description, widget: markdown, required: false, buttons: [bold, italic, link, bulleted-list, numbered-list], editor_components: [], hint: "Full write-up shown on the project's page." }
+              - name: gallery
+                label: Pictures
+                label_singular: Picture
+                widget: list
+                required: false
+                summary: "{{fields.caption}}"
+                hint: Drag to reorder. The first picture is the cover unless you pick a different cover below.
+                fields:
+                  - { name: image, label: Image, widget: image }
+                  - { name: caption, label: Caption, widget: string, required: false }
+              - { name: cover, label: Cover picture (optional), widget: image, required: false, hint: Leave empty to use the first picture. }
+              - { name: hidden, label: Hide from site, widget: boolean, default: false, required: false, hint: Turn on to keep a draft project off the site. }
+              - { name: slug, label: Page link name, widget: string, required: false, hint: "Optional. Leave empty and it's made from the title. Changing it changes the project's link." }
+
+  - name: pages
+    label: Pages
+    editor: { preview: false }
+    files:
+      - name: site
+        label: Home, About & Contact
+        file: content/site.json
+        fields:
+          - { name: name, label: Your name, widget: string }
+          - { name: initials, label: Logo initials, widget: string, hint: "Shown top left, e.g. DMC" }
+          - { name: tagline, label: Home page intro line, widget: string, required: false }
+          - { name: hero_image, label: Home page photo, widget: image, required: false }
+          - { name: about, label: About me text, widget: markdown, required: false, buttons: [bold, italic, link, bulleted-list], editor_components: [] }
+          - name: about_images
+            label: About page photos
+            label_singular: Photo
+            widget: list
+            required: false
+            fields:
+              - { name: image, label: Image, widget: image }
+              - { name: caption, label: Caption, widget: string, required: false }
+          - name: skills
+            label: Skills
+            label_singular: Skill group
+            widget: list
+            required: false
+            summary: "{{fields.category}}"
+            fields:
+              - { name: category, label: Category, widget: string, hint: "e.g. Software" }
+              - { name: items, label: Skills, widget: string, hint: Separate with commas. }
+          - { name: email, label: Preferred email, widget: string }
+          - { name: student_email, label: Student email, widget: string, required: false }
+          - { name: phone, label: Phone, widget: string, required: false }
+          - { name: linkedin, label: LinkedIn URL, widget: string, required: false }
+          - { name: form_email, label: Contact form sends to, widget: string, hint: Messages from the Contact page form are emailed here. }
+
+      - name: resume
+        label: Resume
+        file: content/resume.json
+        fields:
+          - { name: pdf, label: Resume PDF, widget: file, required: false, hint: Upload a new PDF here to replace your resume. Visitors can view and download it. }
+          - { name: updated, label: Last updated, widget: string, required: false, hint: "e.g. October 2026" }
+          - { name: image, label: Fallback image, widget: image, required: false, hint: Only shown when no PDF is uploaded. }
