@@ -1,5 +1,7 @@
-/* Portfolio site — renders every page from the files in /content.
+/* Portfolio site — renders every page from the content stored in Firebase.
    You normally never need to edit this file: change content in /admin instead. */
+
+import { getSite, getResume, getProjects, hydrateImages, imageUrl, fileUrl, slugify } from "./data.js";
 
 const NAV = [
   ["index.html", "Home"],
@@ -38,17 +40,10 @@ function md(text) {
     .join("");
 }
 
-const slugify = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 const telHref = (p) => "tel:" + String(p || "").replace(/[^\d+]/g, "");
 
-async function load(name) {
-  const res = await fetch(`content/${name}.json`, { cache: "no-cache" });
-  if (!res.ok) throw new Error(`Couldn't load content/${name}.json`);
-  return res.json();
-}
-
-function projectList(data) {
-  return (data.projects || [])
+async function projectList() {
+  return (await getProjects())
     .filter((p) => p && p.title && !p.hidden)
     .map((p) => {
       const gallery = (p.gallery || []).filter((g) => g && g.image);
@@ -58,7 +53,7 @@ function projectList(data) {
 
 function card(p) {
   return `<a class="card" href="project.html?p=${encodeURIComponent(p.slug)}">
-    <div class="thumb">${p.coverImg ? `<img src="${esc(p.coverImg)}" alt="" loading="lazy">` : ""}</div>
+    <div class="thumb">${p.coverImg ? `<img data-ref="${esc(p.coverImg)}" alt="" loading="lazy">` : ""}</div>
     <h3>${esc(p.title)}</h3>
     ${p.dates ? `<div class="dates">${esc(p.dates)}</div>` : ""}
     ${p.summary ? `<p>${esc(p.summary)}</p>` : ""}
@@ -70,7 +65,7 @@ function chrome(site) {
   const current = { home: "index.html", project: "projects.html" }[page] || page + ".html";
   const initials = esc(site.initials || "");
   $("#header").innerHTML = `<div class="wrap">
-      <a class="mark" href="index.html">${initials}<span>.</span></a>
+      <a class="mark" href="index.html">${initials}</a>
       <nav class="nav" aria-label="Main">${NAV.map(([href, label]) =>
         `<a href="${href}"${href === current ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav>
     </div>`;
@@ -90,9 +85,9 @@ function chrome(site) {
 
 const pages = {
   async home(site) {
-    const projects = projectList(await load("projects")).slice(0, 3);
+    const projects = (await projectList()).slice(0, 3);
     const hero = site.hero_image
-      ? `<section class="hero"><img src="${esc(site.hero_image)}" alt="">
+      ? `<section class="hero"><img data-ref="${esc(site.hero_image)}" alt="">
            <div class="hero-text"><div class="wrap"><h1>${esc(site.name)}</h1>${site.tagline ? `<p>${esc(site.tagline)}</p>` : ""}</div></div></section>`
       : `<section class="hero no-image"><div class="hero-text"><div class="wrap"><h1>${esc(site.name)}</h1><p>${esc(site.tagline)}</p></div></div></section>`;
     $("#main").innerHTML = `${hero}
@@ -103,7 +98,7 @@ const pages = {
   },
 
   async projects() {
-    const projects = projectList(await load("projects"));
+    const projects = await projectList();
     document.title = "Projects | " + document.title.split("|").pop().trim();
     $("#main").innerHTML = `<div class="wrap">
         <h1 class="page-title">Projects</h1>
@@ -113,7 +108,7 @@ const pages = {
   },
 
   async project(site) {
-    const projects = projectList(await load("projects"));
+    const projects = await projectList();
     const slug = new URLSearchParams(location.search).get("p");
     const i = projects.findIndex((p) => p.slug === slug);
     if (i < 0) {
@@ -130,10 +125,10 @@ const pages = {
     $("#main").innerHTML = `<div class="wrap">
         <a class="back" href="projects.html">← All projects</a>
         <header class="project-head"><h1>${esc(p.title)}</h1>${p.dates ? `<div class="dates">${esc(p.dates)}</div>` : ""}</header>
-        ${p.coverImg ? `<figure class="cover-figure"><img src="${esc(p.coverImg)}" alt="${esc(coverCaption || p.title)}">${coverCaption ? `<figcaption>${esc(coverCaption)}</figcaption>` : ""}</figure>` : ""}
+        ${p.coverImg ? `<figure class="cover-figure"><img data-ref="${esc(p.coverImg)}" alt="${esc(coverCaption || p.title)}">${coverCaption ? `<figcaption>${esc(coverCaption)}</figcaption>` : ""}</figure>` : ""}
         <div class="prose">${md(p.description)}</div>
         ${rest.length ? `<div class="gallery">${rest.map((g, n) => `<figure>
-            <button type="button" data-n="${n}" aria-label="Enlarge image${g.caption ? ": " + esc(g.caption) : ""}"><img src="${esc(g.image)}" alt="${esc(g.caption)}" loading="lazy"></button>
+            <button type="button" data-n="${n}" aria-label="Enlarge image${g.caption ? ": " + esc(g.caption) : ""}"><img data-ref="${esc(g.image)}" alt="${esc(g.caption)}" loading="lazy"></button>
             ${g.caption ? `<figcaption>${esc(g.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : ""}
         <nav class="pager" aria-label="More projects">
           ${prev ? `<a class="prev" href="project.html?p=${encodeURIComponent(prev.slug)}"><small>Previous project</small><strong>${esc(prev.title)}</strong></a>` : ""}
@@ -143,9 +138,9 @@ const pages = {
       <dialog class="lightbox" id="lb"><button class="lb-close" type="button">Close</button><img alt=""><p></p></dialog>`;
     const lb = $("#lb");
     document.querySelectorAll(".gallery button").forEach((b) =>
-      b.addEventListener("click", () => {
+      b.addEventListener("click", async () => {
         const g = rest[+b.dataset.n];
-        lb.querySelector("img").src = g.image;
+        lb.querySelector("img").src = await imageUrl(g.image);
         lb.querySelector("img").alt = g.caption || "";
         lb.querySelector("p").textContent = g.caption || "";
         lb.showModal();
@@ -158,35 +153,43 @@ const pages = {
     document.title = `About | ${site.name}`;
     const photos = (site.about_images || []).filter((x) => x && x.image);
     const skills = (site.skills || []).filter((s) => s && s.category);
+    const photo = (x) => x ? `<div class="about-photo"><img data-ref="${esc(x.image)}" alt=""></div>` : "<div></div>";
     $("#main").innerHTML = `<div class="wrap">
-        <h1 class="page-title">About me</h1>
-        <div class="about" style="margin-top:32px">
-          <div class="prose">${md(site.about)}</div>
-          ${photos.length ? `<div class="about-photos">${photos.map((x) => `<figure><img src="${esc(x.image)}" alt="${esc(x.caption)}">${x.caption ? `<figcaption>${esc(x.caption)}</figcaption>` : ""}</figure>`).join("")}</div>` : "<div></div>"}
-        </div>
-        ${skills.length ? `<div class="section-head"><h2>Skills</h2></div>
-          <dl class="skills">${skills.map((s) => `<dt>${esc(s.category)}</dt><dd>${esc(s.items)}</dd>`).join("")}</dl>` : ""}
+        <section class="about-row">
+          <div><h1>About Me</h1><div class="prose">${md(site.about)}</div></div>
+          ${photo(photos[0])}
+        </section>
+        ${skills.length || photos[1] ? `<section class="about-row flip">
+          ${photo(photos[1])}
+          <div>${skills.length ? `<h2>Skills</h2>
+            <ul class="skills-list">${skills.map((s) => `<li><strong>${esc(s.category)}:</strong> ${esc(s.items)}</li>`).join("")}</ul>` : ""}</div>
+        </section>` : ""}
+        ${photos.length > 2 ? `<div class="about-extra">${photos.slice(2).map((x) => `<img data-ref="${esc(x.image)}" alt="">`).join("")}</div>` : ""}
       </div>`;
   },
 
   async resume(site) {
     document.title = `Resume | ${site.name}`;
-    const r = await load("resume");
-    let body;
-    if (r.pdf) {
-      body = `<div class="actions">
-          <a class="btn" href="${esc(r.pdf)}" download>Download PDF</a>
-          <a class="btn secondary" href="${esc(r.pdf)}" target="_blank" rel="noopener">Open in new tab</a>
-        </div>
-        <iframe class="resume-frame" src="${esc(r.pdf)}#view=FitH" title="Resume"></iframe>`;
+    const r = await getResume();
+    const pdf = await fileUrl(r.pdf).catch(() => "");
+    const fname = (site.name || "resume").replace(/\s+/g, "-") + "-Resume.pdf";
+    let body, actions = "";
+    if (pdf) {
+      actions = `<div class="actions">
+          <a class="btn" href="${esc(pdf)}" download="${esc(fname)}">Download PDF</a>
+          <a class="btn secondary" href="${esc(pdf)}" target="_blank" rel="noopener">Open in new tab</a>
+        </div>`;
+      body = `<iframe class="resume-frame" src="${esc(pdf)}#view=Fit&toolbar=0&navpanes=0" title="Resume"></iframe>`;
     } else if (r.image) {
-      body = `<div class="resume-image"><img src="${esc(r.image)}" alt="Resume of ${esc(site.name)}"></div>`;
+      body = `<div class="resume-image"><img data-ref="${esc(r.image)}" alt="Resume of ${esc(site.name)}"></div>`;
     } else {
       body = `<p class="empty">Resume coming soon.</p>`;
     }
     $("#main").innerHTML = `<div class="wrap">
-        <h1 class="page-title">Resume</h1>
-        <p class="lede">${r.updated ? "Last updated " + esc(r.updated) + "." : ""}</p>
+        <div class="resume-head">
+          <div><h1 class="page-title">Resume</h1>${r.updated ? `<p class="lede">Last updated ${esc(r.updated)}.</p>` : ""}</div>
+          ${actions}
+        </div>
         ${body}
       </div>`;
   },
@@ -254,9 +257,10 @@ const pages = {
 
 (async function init() {
   try {
-    const site = await load("site");
+    const site = await getSite();
     chrome(site);
     await pages[document.body.dataset.page](site);
+    hydrateImages();
   } catch (err) {
     $("#main").innerHTML = `<div class="wrap"><p class="empty">${esc(err.message)}</p></div>`;
     console.error(err);

@@ -5,8 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Edit portfolio</title>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+  <link rel="stylesheet" href="../assets/style.css">
+  <link rel="stylesheet" href="admin.css">
 </head>
-<body>
-  <script src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"></script>
+<body class="admin">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="mark" href="./">Editor</a>
+      <div class="account" id="account"></div>
+    </div>
+  </header>
+  <main id="main"><div class="wrap"><p class="muted" style="margin-top:48px">Loading…</p></div></main>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="admin.js"></script>
 </body>
 </html>

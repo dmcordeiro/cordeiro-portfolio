@@ -1,60 +1,70 @@
 # Your portfolio site — setup and editing
 
-Free hosting on GitHub Pages, no ads or watermark. You edit everything at **yoursite/admin** with forms — no code.
+When setup is done you'll have two bookmarks:
 
-## One-time setup (about 15 minutes)
+| Bookmark | Address | What it's for |
+|---|---|---|
+| **Portfolio** | `https://dmcordeiro.github.io/cordeiro-portfolio/` | Your public site |
+| **Edit portfolio** | `https://dmcordeiro.github.io/cordeiro-portfolio/admin/` | Sign in with Google, edit, Save |
 
-Your GitHub account is **dmcordeiro**, and the repository is **cordeiro-portfolio**, so your site will be **https://dmcordeiro.github.io/cordeiro-portfolio**. The settings file already has this filled in.
+GitHub holds the site's files (with version history). Your Firebase project handles Google sign-in and stores your content. Free, nothing to install.
 
-### 1. Create the repository
-1. Sign in to github.com, click **+** (top right) → **New repository**.
-2. Make sure **Owner** shows `dmcordeiro`, and name it exactly **cordeiro-portfolio**.
-3. Set it to **Public**, then click **Create repository**.
+## One-time setup
 
-### 2. Upload the files
-1. On the new repository page, click **uploading an existing file**.
-2. Unzip the folder you got from Claude, open it, select **everything inside** (not the folder itself) and drag it in.
-   - On a Mac, press Cmd+Shift+. in Finder first so the hidden `.nojekyll` file shows, and include it.
-3. Click **Commit changes**.
+### 1. Firebase project ✅ done
+Your project `cordeiro-portfolio` exists, and its settings are already in `assets/firebase-config.js`.
 
-### 3. Turn on the site
-1. In the repository, go to **Settings → Pages**.
-2. Under **Branch**, pick **main** and **/ (root)**, then **Save**.
-3. Wait 1–2 minutes. Your site is live at **https://dmcordeiro.github.io/cordeiro-portfolio**.
+### 2. Google sign-in and the database (skip anything you've already done)
+1. console.firebase.google.com → **cordeiro-portfolio** → **Build → Authentication** → **Sign-in method** → **Google** → **Enable** → **Save**.
+2. **Build → Firestore Database** → **Create database** → location **us-west2** → **Start in production mode** → **Create**.
+3. In Firestore, open the **Rules** tab. Delete everything in the box, paste in the whole contents of `firestore.rules` from your folder (open it with Notepad), and click **Publish**. This lets anyone *view* the site but only your Google account *change* it.
 
-### 4. Make your editor key (token)
-1. Go to github.com/settings/personal-access-tokens → **Generate new token** (fine-grained).
-2. Name: `portfolio editor`. Expiration: the longest it allows (you can make a new one later).
-3. **Resource owner**: `dmcordeiro` (not the AER organization).
-4. **Repository access** → Only select repositories → pick `cordeiro-portfolio`.
-5. **Permissions → Repository permissions → Contents → Read and write**.
-6. Generate it and copy it. Treat it like a password — don't share it or put it on the site.
+### 3. Put the files on GitHub
+1. On github.com, signed in as **dmcordeiro**: **+** → **New repository** → name it **cordeiro-portfolio** → **Public** → **Create repository**.
+2. Click **uploading an existing file**. Open your unzipped **portfolio** folder, select everything inside it, and drag it in. (Or add the files with GitHub Desktop, like your planner.) **Commit changes**.
+3. Repository **Settings → Pages** → Branch **main**, folder **/ (root)** → **Save**. After a minute or two the site is live at `https://dmcordeiro.github.io/cordeiro-portfolio/`.
 
-### 5. Open the editor
-Go to **https://dmcordeiro.github.io/cordeiro-portfolio/admin**, click **Sign In with Token**, and paste the token. Your browser remembers it, so you only do this once per device.
+### 4. Let Google sign-in work on that address
+Firebase console → **Authentication** → **Settings** tab → **Authorized domains** → **Add domain** → `dmcordeiro.github.io` → **Add**.
+Your Satisfactory planner needs the same fix after the username change, since it's a separate Firebase project: open **denial-satisfactory-planner** and add `dmcordeiro.github.io` there too.
+
+### 5. Bring your content in
+1. Open your **Edit portfolio** address → **Sign in with Google**.
+2. Click **Import my content** (only shown the first time). Your six projects, About page, contact info and resume come over from the old site.
+3. Bookmark both addresses from the table at the top.
 
 ### 6. Turn on the contact form
-Send yourself one test message from the Contact page. FormSubmit emails you an activation link — click it once, and from then on every message lands in your Gmail. (Check spam if you don't see it.)
+Send yourself one test message from the Contact page. FormSubmit emails you an activation link. Click it once, and from then on every message lands in your Gmail. (Check spam if you don't see it.)
 
 ---
 
 ## Editing day to day
 
-Open **/admin** → choose a section → change things → **Save**. The live site updates about a minute later (refresh the page; a hard refresh with Ctrl+Shift+R if it looks stale).
+Open your **Edit portfolio** bookmark on any device, sign in with Google, edit, and click **Save**. Changes are live right away. No GitHub needed for this.
 
-- **Add a project:** Projects → All projects → **Add Project**. Fill in the title, dates, a one-line summary, the description, and add pictures.
-- **Reorder projects:** drag them in the list. Top of the list = first on the site; the home page shows the top three.
-- **Cover picture:** the first picture is the cover automatically. To use a different one, set **Cover picture**. The cover is shown first on the project page and isn't repeated in the gallery.
-- **Draft a project:** turn on **Hide from site** until it's ready.
-- **Update your resume:** Pages → Resume → upload the new PDF in **Resume PDF**, update the date, Save. Visitors get a viewer plus a download button.
-- **Edit About, skills, photos, contact info:** Pages → Home, About & Contact.
-- **Descriptions** support bold, italic, links and bullet lists from the editor toolbar.
+- **Add a project:** Projects → **Add project** → fill it in → **Publish project**.
+- **Reorder projects:** the ↑ ↓ arrows. Top of the list shows first; the home page shows the top three.
+- **Pictures:** in a project, click **Add pictures** (or drag files onto it). Use ← → to reorder, **Make cover** to choose the cover, type a caption under each one. The cover shows first and isn't repeated in the gallery.
+- **Draft a project:** tick **Hide this project from the site** until it's ready.
+- **Resume:** Resume tab → **Upload new PDF** → **Save changes**. Visitors get a viewer and a download button. PDFs up to 10 MB work.
+- **About, skills, photos:** Home & About tab. The first About photo sits next to your text, the second next to Skills.
+- **Email, phone, LinkedIn:** Contact info tab. Leave a field empty to hide it.
+- **Descriptions:** a blank line starts a new paragraph, `- ` at the start of a line makes a bullet, `**like this**` makes bold.
 
-## Important: move your pictures off Wix
-Your current pictures are still loaded from Wix's servers. They'll keep working while your Wix account exists, but if you delete it they'll disappear. When you have a few minutes, open each project in /admin, re-upload the original image files (higher quality anyway), and delete the old ones.
+Pictures are shrunk to web size (about 1800 px wide) when you add them, so keep your originals somewhere.
 
-## Folder guide (in case you're curious)
-- `content/` — all your text and picture lists (the editor changes these)
-- `uploads/` — pictures and PDFs you upload in the editor
-- `assets/` — design and page code (`style.css` for colors and fonts)
+## Changing the design later
+Only needed when the site's code or look changes (for example, after Claude sends you updated files): replace the files in the repo (upload on github.com, or commit with GitHub Desktop). The site updates a minute or two later. Your content isn't affected; it lives in Firebase, not in the files. GitHub keeps every version, so you can always go back.
+
+## Visitor stats
+Firebase console → **Analytics** shows how many people visit, which pages and projects they look at, where they're from and what device they use. Stats take up to a day to start showing. It's counts and trends, not names.
+
+## Move your pictures off Wix
+Your imported pictures still load from Wix's servers. They'll keep working while your Wix account exists. When you have a few minutes, open each project in the editor, add the original picture files, and **Remove** the old ones.
+
+## What's in the folder
+- `index.html`, `about.html`, `projects.html`, `project.html`, `resume.html`, `contact.html` — the pages
+- `assets/` — the site's design and code, plus your Firebase settings (`firebase-config.js`)
 - `admin/` — the editor
+- `content/` — starter content, used only by **Import my content**
+- `firestore.rules` — the "only you can edit" rule you pasted in step 2
