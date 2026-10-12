@@ -1,0 +1,89 @@
+{
+  "projects": [
+    {
+      "title": "AER 27 Suspension Kinematics",
+      "slug": "aer-27-suspension-kinematics",
+      "dates": "Sep 2026 – Current",
+      "summary": "Double-wishbone cantilever suspension for the AER 27 car, designed in Optimum Kinematics.",
+      "cover": "",
+      "hidden": false,
+      "description": "Fully designed a double-wishbone cantilever suspension system for the AER 27 vehicle using Optimum Kinematics. Modified rear kinematics for packaging with minimal modifications to the performance of the vehicle.\n\nA reduction in the chassis length in the rear called for major design changes in the rear of the vehicle, causing pickup points to move forward by up to 200mm.\n\nOptimized kinematics for camber gain, damper lengths, motion ratio, bump steer, and rocker angle.",
+      "gallery": [
+        { "image": "https://static.wixstatic.com/media/d22c1b_e68d1304e8054df5bcba12cf830458ff~mv2.png", "caption": "v0.0 full suspension kinematics" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_79324e38ddc74af782f6aa6bf746be9a~mv2.png", "caption": "v2.4 full suspension kinematics" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_295cff6eaa114bd1b15297cc2ef1ca66~mv2.png", "caption": "" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_0d8d9c0d445246ff9d3193c7aa0a6367~mv2.png", "caption": "" }
+      ]
+    },
+    {
+      "title": "Glazz Home Presence System",
+      "slug": "glazz-home-presence-system",
+      "dates": "May 2026 – Aug 2026",
+      "summary": "Waterproof 3D-printed enclosure for a startup's AI home presence and safety device.",
+      "cover": "",
+      "hidden": false,
+      "description": "Contract work for a small startup developing an AI smart home presence and safety system.\n\n- Designed and built the device's waterproof enclosure in SolidWorks, 3D printing each iteration on a BambuLab P1S\n- ASA filament for UV resistance and strength, with a TPU gasket for IP68 sealing\n- Ran waterproofing tests throughout the design process\n- Wrote full assembly documentation and weekly engineering invention memos\n- Presented designs weekly to the team and to potential investors",
+      "gallery": [
+        { "image": "https://static.wixstatic.com/media/d22c1b_9e8fd563da03441daa0510be01eabaa2~mv2.png", "caption": "" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_d1c9936fe87c4510adf6db20e13f7d58~mv2.png", "caption": "" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_efcd86bf4d9943ddb8be58e0c0b623b9~mv2.png", "caption": "" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_cabaee3be2b1430388c45503d63aed6b~mv2.png", "caption": "" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_ccef9793f41344c7bc6f26e727a02295~mv2.jpg", "caption": "" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_93ca2a837c0f444ab803f23a1883b04b~mv2.png", "caption": "" }
+      ]
+    },
+    {
+      "title": "Custom Racing Simulator Rig",
+      "slug": "racing-simulator-rig",
+      "dates": "",
+      "summary": "Aluminum-extrusion sim rig with a pivoting sheet metal wheelbase mount.",
+      "cover": "",
+      "hidden": false,
+      "description": "Custom designed rig on SolidWorks with 4040 and 4080 aluminum extrusions, bent sheet metal wheelbase mount, and 3D printed accessories.",
+      "gallery": [
+        { "image": "https://static.wixstatic.com/media/d22c1b_81979a2ee9934b4586f954d5a6ef66fc~mv2.jpg", "caption": "Full rig assembled" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_ce1cf79c4ea6456cb4e5cebafc80d6f3~mv2.png", "caption": "CAD model" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_b603c6971871468584bdb14af1fc307c~mv2.png", "caption": "Sheet metal wheelbase mount. Able to be pivoted." },
+        { "image": "https://static.wixstatic.com/media/d22c1b_ffd19bb80b6641ebbba9a9842895e7aa~mv2.jpg", "caption": "Rear of rig" }
+      ]
+    },
+    {
+      "title": "Wheel Alignment Rig",
+      "slug": "wheel-alignment-rig",
+      "dates": "",
+      "summary": "Chassis-mounted alignment rig built from 2020 aluminum extrusion.",
+      "cover": "",
+      "hidden": false,
+      "description": "Designed a chassis-mounted wheel alignment rig using 2020 aluminum extrusion for lightness and rigidity.",
+      "gallery": [
+        { "image": "https://static.wixstatic.com/media/d22c1b_8719649955b4461bb8a44dfcf0a81e52~mv2.jpg", "caption": "Front and rear assembled" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_f2be2b2b2af64837a416be230e63fa72~mv2.png", "caption": "CAD model" }
+      ]
+    },
+    {
+      "title": "AER 26 Suspension Tabs",
+      "slug": "aer-26-suspension-tabs",
+      "dates": "",
+      "summary": "Suspension tabs designed in SolidWorks and prepped for waterjetting.",
+      "cover": "",
+      "hidden": false,
+      "description": "Designed suspension tabs in SolidWorks and prepared them for waterjetting.",
+      "gallery": [
+        { "image": "https://static.wixstatic.com/media/d22c1b_1c38236a83f640daa29e246b86c04fad~mv2.png", "caption": "" }
+      ]
+    },
+    {
+      "title": "Fixtures – Suspension Tabs",
+      "slug": "suspension-tab-fixtures",
+      "dates": "",
+      "summary": "PET-CF printed fixtures for suspension tabs, supported by aluminum towers.",
+      "cover": "",
+      "hidden": false,
+      "description": "Designed fixtures for suspension tabs in SolidWorks. 3D printed out of PET-CF filament and supported using aluminum towers.",
+      "gallery": [
+        { "image": "https://static.wixstatic.com/media/d22c1b_c249ab52691746a38ba0b75d2493d508~mv2.png", "caption": "" },
+        { "image": "https://static.wixstatic.com/media/d22c1b_8b816c32a0a045cab5a7df744f667cbc~mv2.png", "caption": "" }
+      ]
+    }
+  ]
+}
