@@ -120,6 +120,16 @@ export async function buildPortfolioPdf(onProgress = () => {}) {
     doc.addImage(pic.data, "JPEG", dx, dy, dw, dh, undefined, "FAST");
     return { dx, dy, dw, dh };
   };
+  // "See full website: <link>" with the address clickable. align: "left" | "center".
+  const siteShort = siteUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  const websiteLine = (x, y, size, align = "left") => {
+    const label = "See full website: ";
+    font(size); const lw = doc.getTextWidth(label), uw = doc.getTextWidth(siteShort);
+    const sx = align === "center" ? x - (lw + uw) / 2 : x;
+    color(C.muted); doc.text(label, sx, y);
+    color(C.ink); doc.textWithLink(siteShort, sx + lw, y, { url: siteUrl });
+    fill(C.muted); doc.rect(sx + lw, y + 1.5, uw, 0.5, "F");
+  };
   const missing = (x, y, w, h) => {
     fill(C.tile); doc.rect(x, y, w, h, "F");
     font(9); color(C.muted); doc.text("Picture couldn't be added", x + w / 2, y + h / 2, { align: "center", baseline: "middle" });
@@ -167,6 +177,7 @@ export async function buildPortfolioPdf(onProgress = () => {}) {
   font(20); color(C.ink); doc.text("Engineering Portfolio", M, H - 132);
   fill(C.accent); doc.rect(M, H - 116, 48, 2, "F");
   if (site.tagline) { font(12); color(C.muted); doc.text(doc.splitTextToSize(plain(site.tagline), 460), M, H - 92); }
+  websiteLine(M, H - M, 11);
   font(10); color(C.muted);
   doc.text(new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" }), W - M, H - M, { align: "right" });
 
@@ -292,6 +303,7 @@ export async function buildPortfolioPdf(onProgress = () => {}) {
     font(8.5); color(C.muted);
     doc.text(name, M, H - 26);
     doc.text(String(pg), W - M, H - 26, { align: "right" });
+    websiteLine(W / 2, H - 26, 8.5, "center");
   });
 
   onProgress("Saving…");
